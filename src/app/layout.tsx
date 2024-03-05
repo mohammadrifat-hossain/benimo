@@ -28,7 +28,7 @@ export default function RootLayout({
         <AuthProvider>
           <Header />
           <Toaster />
-          <div className="pt-[65px] max-w-[1600px] mx-auto">{children}</div>
+          <div className="pt-[60px] max-w-[1600px] mx-auto">{children}</div>
         </AuthProvider>
       </body>
     </html>
