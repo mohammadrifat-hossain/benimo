@@ -1,12 +1,13 @@
 "use client";
 
-import Image from "next/image";
+
 import Link from "next/link";
 import React from "react";
 import MenuPage from "./Menu";
 import { Badge } from "@mui/material";
 import { Bell, MessageCircle } from "lucide-react";
 import SearchDrawer from "./Search";
+import Notifications from "./Header/Notifications";
 
 const Header = () => {
   return (
@@ -23,11 +24,7 @@ const Header = () => {
             <MessageCircle size={"30px"} />
           </Badge>
         </Link>
-        <Link href={'/notifcation'}>
-          <Badge badgeContent={1} color="primary">
-            <Bell size={"30px"} />
-          </Badge>
-        </Link>
+        <Notifications />
         <MenuPage />
       </div>
     </div>

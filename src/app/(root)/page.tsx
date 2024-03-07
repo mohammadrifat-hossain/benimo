@@ -3,6 +3,7 @@
 import { Button } from "@mui/material";
 import { signIn, signOut, useSession } from "next-auth/react";
 import MidSide from "./_components/MidSide";
+import RightSide from "@/components/RightSide";
 
 export default function Home() {
   const { data } = useSession();
@@ -15,7 +16,9 @@ export default function Home() {
         <MidSide />
       </div>
       {/* {right} */}
-      <div className=" h-[91.5vh] md:h-[93.5vh] w-2/5 hidden md:block"></div>
+      <div className=" h-[91.5vh] md:h-[93.5vh] w-2/5 hidden md:block">
+        <RightSide />
+      </div>
     </main>
   );
 }
