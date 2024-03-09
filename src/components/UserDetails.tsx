@@ -13,8 +13,6 @@ interface UserDetailsProps{
 const UserDetails = ({ authorInfo, createdAt}: UserDetailsProps) => {
   const [formattedDate, setFormattedDate] = useState('');
   
-  const postTime = moment().fromNow(createdAt);
-
   useEffect(() => {
     updateFormattedDate(createdAt); // Replace with your actual date string
   }, [createdAt]);
