@@ -111,4 +111,5 @@ model Notification {
   createdAt    DateTime @default(now())
   notification String
   redirectUrl  String
+  seen Boolean @default(false)
 }

@@ -4,13 +4,21 @@ import { PostType, UserProfileType } from "@/lib/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 const ProfilePage = () => {
   const { data: userData } = useSession();
+  const router = useRouter()
 
   const [userInfo, setUserInfo] = useState<UserProfileType | null>(null);
   const [allPosts, setAllPosts] = useState<PostType[] | null>(null);
+
+  useEffect(()=>{
+    if(!userData?.user){
+      router.push('/login')
+    }
+  },[router, userData])
 
   const getUser = useCallback(async () => {
     const { data } = await axios.post("/api/getuser", {

@@ -34,7 +34,7 @@ const RightSide = () => {
               Connections
             </button>
           </Link>
-          <Link href={"/profile"}>
+          <Link href={"/mysetting"}>
             <button className="flex items-center justify-start gap-3 text-lg  font-bold  w-full px-5 py-2 rounded-md bg-[#eee] hover:bg-[#d8d8d8] transition-all">
               <Settings />
               Setting
