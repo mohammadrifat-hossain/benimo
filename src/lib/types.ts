@@ -5,7 +5,8 @@ export type UserProfileType = {
   password: string | null; 
   image: string;
   emailVerified: Boolean | null; 
-  createdAt: string; 
+  createdAt: string;
+  verified?: boolean
 } | null
 
 export type CommentType = {
@@ -13,5 +14,13 @@ export type CommentType = {
   content: string;
   createdAt: Date;
   postId: string; 
+  authorId: string;
+}
+
+export type PostType = {
+  id: string;
+  content: string;
+  imageUrl: string;
+  createdAt: Date | string;
   authorId: string;
 }

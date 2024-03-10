@@ -1,17 +1,35 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import StoryComponent from "./StoryComponent";
 import PostView from "@/components/PostView";
 import Image from "next/image";
+import { PostType } from "@/lib/types";
+import axios from "axios";
 
 const MidSide = () => {
   const { data } = useSession();
   const router = useRouter();
 
   const [inputValue, setInputValue] = useState("");
+  const [allPosts, setAllPosts] = useState<PostType[] | null>(null);
+
+  useEffect(() => {
+    if (!data?.user) {
+      router.push("/login");
+    }
+  }, [router, data]);
+
+  const getAllPosts = useCallback(async () => {
+    const { data } = await axios.get("/api/getallposts");
+    setAllPosts(data.allPosts);
+  }, []);
+
+  useEffect(() => {
+    getAllPosts();
+  }, [getAllPosts]);
 
   //functions
 
@@ -50,18 +68,19 @@ const MidSide = () => {
           <StoryComponent />
         </div>
         <div className="w-full overflow-y-scroll relative">
-          <PostView
-            postId="65e965c2c3621913b337114d"
-            userEmail={data?.user?.email}
-          />
-          <PostView
-            postId="65e9b2ff00f7246c512d5865"
-            userEmail={data?.user?.email}
-          />
-          <PostView
-            postId="65e965c2c3621913b337114d"
-            userEmail={data?.user?.email}
-          />
+          {allPosts && allPosts?.length > 0 ? (
+            allPosts?.map((item, i) => (
+              <PostView
+                key={item.id}
+                postId={item.id}
+                userEmail={data?.user?.email}
+              />
+            ))
+          ) : (
+            <div className="w-full mt-6 flex items-center justify-center">
+              <h1 className="text-lg">No post available</h1>
+            </div>
+          )}
         </div>
       </div>
     </div>

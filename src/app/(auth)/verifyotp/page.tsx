@@ -127,7 +127,7 @@ const VerifyOtp = () => {
         }
         if(result.success){
           toast({
-            title: result.message
+            title: "Register succes. Now login to continue"
           })
           router.push('/login')
         }else{

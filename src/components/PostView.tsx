@@ -21,6 +21,7 @@ import { CommentType, UserProfileType } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { toast } from "./ui/use-toast";
 import { useSession } from "next-auth/react";
+import DeleteConfirmation from "@/app/(root)/_components/DeleteConfirmation";
 
 interface PostViewProps {
   postId: string;
@@ -47,6 +48,13 @@ const PostView = ({ postId, userEmail, isProfile }: PostViewProps) => {
 
   const router = useRouter();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const {data: userData} = useSession()
+
+  useEffect(()=>{
+    if(!userData){
+      router.push('/login')
+    }
+  },[router, userData])
 
   const getPost = useCallback(async () => {
     const { data } = await axios.post("/api/getpostdetails", {
@@ -144,14 +152,11 @@ const PostView = ({ postId, userEmail, isProfile }: PostViewProps) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <div className="flex flex-col gap-2 justify-start items-start w-full">
-                  <button className="flex items-center justify-start gap-2 hover:bg-[#aaaaaa38] transition-all w-full">
+                  <button className="flex items-center justify-start gap-2 hover:bg-[#aaaaaa38] transition-all w-full" onClick={()=> router.push(`/editpost/${postId}`)}>
                     <Edit />
                     Edit
                   </button>
-                  <button className="flex items-center justify-start gap-2 hover:bg-[#aaaaaa38] transition-all w-full">
-                    <Trash2 />
-                    Delete
-                  </button>
+                  <DeleteConfirmation postId={postId}/>
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -26,6 +26,8 @@ import { Toast } from "@/components/ui/toast";
 import { useSession } from "next-auth/react";
 import { toast } from "@/components/ui/use-toast";
 import CommentSection from "../../_components/CommentSection";
+import DeleteConfirmation from "../../_components/DeleteConfirmation";
+import { TbCircleChevronLeft } from "react-icons/tb";
 
 interface PostContentProps {
   postId: string;
@@ -160,6 +162,9 @@ const PostContent = ({ params: { postContentId } }: PostContentProps) => {
 
   return (
     <div className="mt-5 max-w-[1200px] mx-auto">
+      <div className="pl-5">
+        <TbCircleChevronLeft size={"28px"} />
+      </div>
       <div className="flex items-center justify-between w-full p-4">
         <div>
           <UserDetails
@@ -179,14 +184,18 @@ const PostContent = ({ params: { postContentId } }: PostContentProps) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <div className="flex flex-col gap-2 justify-start items-start w-full">
-                  <button className="flex items-center justify-start gap-2 hover:bg-[#aaaaaa38] transition-all w-full">
+                  <button
+                    className="flex items-center justify-start gap-2 hover:bg-[#aaaaaa38] transition-all w-full"
+                    onClick={() => router.push(`/editpost/${postContentId}`)}
+                  >
                     <Edit />
                     Edit
                   </button>
-                  <button className="flex items-center justify-start gap-2 hover:bg-[#aaaaaa38] transition-all w-full">
+                  {/* <button className="flex items-center justify-start gap-2 hover:bg-[#aaaaaa38] transition-all w-full">
                     <Trash2 />
                     Delete
-                  </button>
+                  </button> */}
+                  <DeleteConfirmation postId={postContentId} />
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -251,7 +260,12 @@ const PostContent = ({ params: { postContentId } }: PostContentProps) => {
       <div className="w-full mt-4">
         <div className="flex flex-col items-center justify-center w-full gap-4">
           {allPostComments?.map((item, i) => (
-              <CommentSection key={i} createdAt={item.createdAt} content={item.content} authorId={item.authorId} />
+            <CommentSection
+              key={i}
+              createdAt={item.createdAt}
+              content={item.content}
+              authorId={item.authorId}
+            />
           ))}
         </div>
       </div>

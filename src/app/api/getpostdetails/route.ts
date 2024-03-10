@@ -40,7 +40,7 @@ export const POST = async (req: Request) => {
       },
     });
 
-    return NextResponse.json({ postInfo, isLiked, success: true });
+    return NextResponse.json({ postInfo, isLiked, userInfo, success: true });
   } catch (error: any) {
     console.error(error);
     return NextResponse.json({ message: error.message, success: false });

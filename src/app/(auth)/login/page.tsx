@@ -9,7 +9,7 @@ import { FcGoogle } from "react-icons/fc";
 
 export const Loader = () => {
   return (
-    <div className="fixed h-screen w-screen flex items-center justify-center left-0 top-0">
+    <div className="fixed h-screen w-screen flex items-center justify-center left-0 top-0 opacity-50">
       <Image
         src={
           "https://i.pinimg.com/originals/2c/bb/5e/2cbb5e95b97aa2b496f6eaec84b9240d.gif"
@@ -27,44 +27,58 @@ const LoginPage = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   //functions
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true)
-    signIn("credentials",{
+    setIsLoading(true);
+    signIn("credentials", {
       redirect: false,
       email,
-      password
+      password,
     })
-    .then((response)=>{
-      if(response?.ok){
-        toast({
-          title:"Login Success"
-        })
-      }else{
-        toast({
-          title: response?.error!
-        })
-      }
-      
-    })
-    .catch((error=>{
-      toast({
-        title: error
+      .then((response) => {
+        if (response?.ok) {
+          toast({
+            title: "Login Success",
+          });
+        } else {
+          toast({
+            title: response?.error!,
+          });
+        }
       })
-    }))
+      .catch((error) => {
+        toast({
+          title: error,
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
     if (data?.user) {
       router.push("/");
+    } else {
+      setInterval(() => {
+        setLoading(false);
+      }, 1500);
     }
   }, [data?.user, router]);
 
   return (
     <Suspense>
+      <div
+        className={`absolute h-screen w-screen bg-[#fdfdfd] left-0 top-0 ${
+          loading ? "flex" : "hidden"
+        }`}
+      >
+        <Loader />
+      </div>
       <div className="flex items-center h-[90vh] p-4 bg-gray-100 lg:justify-center">
         <div className="flex flex-col overflow-hidden bg-white rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md w-screen">
           <div className="p-4 py-6 text-white bg-blue-500 md:w-80 md:flex-shrink-0 md:flex md:flex-col md:items-center md:justify-evenly">
@@ -141,7 +155,7 @@ const LoginPage = () => {
                   type="submit"
                   className="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-blue-500 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-blue-200 focus:ring-4"
                 >
-                  Log in
+                  {isLoading ? "Loggin in" : "login"}
                 </button>
               </div>
               <div className="flex flex-col space-y-5">

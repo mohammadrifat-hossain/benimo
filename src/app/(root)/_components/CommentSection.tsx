@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+import { VerifiedIcon } from "lucide-react";
 import moment from "moment";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
@@ -18,6 +19,7 @@ interface UserType {
   image: string;
   emailVerified: null | boolean; // Assuming emailVerified can be null or a boolean
   createdAt: string | Date;
+  verified?: boolean;
 }
 
 const CommentSection = ({
@@ -68,7 +70,12 @@ const CommentSection = ({
           />
         </div>
         <div>
-          <h1 className="font-bold">{userInfo?.name}</h1>
+          <h1 className="font-bold flex items-center gap-2">
+            {userInfo?.name}{" "}
+            {userInfo?.verified && (
+              <VerifiedIcon className="" fill="#00FFFF90" />
+            )}
+          </h1>
           <span className="text-[#aaa]">{formattedDate}</span>
         </div>
       </div>
