@@ -7,9 +7,10 @@ import {
 } from "@/components/ui/popover";
 
 import { signIn, signOut, useSession } from "next-auth/react";
-import { LogIn, LogOut, Settings, User, Users } from "lucide-react";
+import { ImagePlus, LogIn, LogOut, Settings, User, Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { HiHome } from "react-icons/hi";
 
 const MenuPage = () => {
   const { data } = useSession();
@@ -17,7 +18,11 @@ const MenuPage = () => {
     <Popover>
       <PopoverTrigger>
         <Image
-          src={data?.user?.image ? data.user.image : "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?t=st=1709793783~exp=1709797383~hmac=1eb331173ed3f1b60b281adfa47fc12c20d1839130ecf9b7e5fb9f961a1bc8a5&w=826"}
+          src={
+            data?.user?.image
+              ? data.user.image
+              : "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?t=st=1709793783~exp=1709797383~hmac=1eb331173ed3f1b60b281adfa47fc12c20d1839130ecf9b7e5fb9f961a1bc8a5&w=826"
+          }
           alt="profile"
           height={40}
           width={40}
@@ -31,9 +36,25 @@ const MenuPage = () => {
             <Link href={"/"}>
               <button className="flex items-center justify-start gap-4 hover: px-6 py-2 w-full hover:bg-slate-100 text-slate-500">
                 <span>
+                  <HiHome className="text-[24px]" />
+                </span>
+                <span className="text-base">Home</span>
+              </button>
+            </Link>
+            <Link href={"/profile"}>
+              <button className="flex items-center justify-start gap-4 hover: px-6 py-2 w-full hover:bg-slate-100 text-slate-500">
+                <span>
                   <User className="" />
                 </span>
                 <span className="text-base">Profile</span>
+              </button>
+            </Link>
+            <Link href={"/createpost"}>
+              <button className="flex items-center justify-start gap-4 hover: px-6 py-2 w-full hover:bg-slate-100 text-slate-500">
+                <span>
+                  <ImagePlus className="" />
+                </span>
+                <span className="text-base">Post</span>
               </button>
             </Link>
             <Link href={"/"}>

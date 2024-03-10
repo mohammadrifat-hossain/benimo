@@ -70,7 +70,7 @@ const CreatePostPage = () => {
               title: response.data.message,
               description:"redirected to your post"
             })
-            router.push(`/postcontent/${response.data.post.id}`)
+            router.push(`/`)
           }else{
             toast({
               title: response.data.message,

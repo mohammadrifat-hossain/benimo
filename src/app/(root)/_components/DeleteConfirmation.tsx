@@ -15,31 +15,31 @@ import axios from "axios";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-interface DeleteConfirmationProps{
-  postId: string
+interface DeleteConfirmationProps {
+  postId: string;
 }
 
-const DeleteConfirmation = ({postId}:DeleteConfirmationProps) => {
-  const {push, refresh} = useRouter()
+const DeleteConfirmation = ({ postId }: DeleteConfirmationProps) => {
+  const { push, refresh } = useRouter();
 
   const handleDelete = async () => {
-    const {data} = await axios.delete(`/api/deletepost/${postId}`)
-    if(data.success){
+    const { data } = await axios.delete(`/api/deletepost/${postId}`);
+    if (data.success) {
       toast({
-        title: data?.message
-      })
-      refresh()
-      push('/')
-    }else{
+        title: data?.message,
+      });
+      refresh();
+      push("/");
+    } else {
       toast({
-        title: data?.message
-      })
+        title: data?.message,
+      });
     }
-  }
+  };
   return (
     <AlertDialog>
       <AlertDialogTrigger className="w-full">
-        <button className="flex items-center justify-start gap-2 hover:bg-[#aaaaaa38] transition-all w-full">
+        <button className="flex items-center justify-start gap-2 hover:bg-[#aaaaaa38] transition-all w-full h-full">
           <Trash2 />
           Delete
         </button>
@@ -57,8 +57,10 @@ const DeleteConfirmation = ({postId}:DeleteConfirmationProps) => {
 
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>
-            <button onClick={handleDelete}>Continue</button>
+          <AlertDialogAction className="p-0">
+            <button onClick={handleDelete} className="w-full h-full px-4">
+              Continue
+            </button>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

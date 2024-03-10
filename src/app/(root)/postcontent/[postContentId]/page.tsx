@@ -112,8 +112,9 @@ const PostContent = ({ params: { postContentId } }: PostContentProps) => {
   useEffect(() => {
     if (commentInput.current && postAuthor) {
       commentInput.current.focus();
+      router.refresh();
     }
-  }, [postAuthor]);
+  }, [postAuthor, router]);
 
   //functions
   const handleAddLike = useCallback(async () => {
@@ -159,11 +160,14 @@ const PostContent = ({ params: { postContentId } }: PostContentProps) => {
       });
     }
   }, [commentValue, postInfo, UserData, getPostComments]);
-
+  //
+  const handleBack = () => {
+    history.back();
+  };
   return (
-    <div className="mt-5 max-w-[1200px] mx-auto">
+    <div className="mt-5 max-w-[1200px] mx-auto h-full overflow-y-scroll">
       <div className="pl-5">
-        <TbCircleChevronLeft size={"28px"} />
+        <TbCircleChevronLeft size={"28px"} onClick={handleBack} />
       </div>
       <div className="flex items-center justify-between w-full p-4">
         <div>
