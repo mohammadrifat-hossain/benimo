@@ -46,7 +46,7 @@ const UserDetails = ({ authorInfo, createdAt }: UserDetailsProps) => {
           />
           <div>
             <Link
-              href={`/userprofile/42434`}
+              href={`/userprofile/${authorInfo?.id}`}
               className="text-lg font-bold flex items-center gap-2"
             >
               {authorInfo.name}{" "}

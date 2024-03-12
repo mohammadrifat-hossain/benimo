@@ -57,7 +57,7 @@ const MenuPage = () => {
                 <span className="text-base">Post</span>
               </button>
             </Link>
-            <Link href={"/"}>
+            <Link href={"/connections"}>
               <button className="flex items-center justify-start gap-4 hover: px-6 py-2 w-full hover:bg-slate-100 text-slate-500">
                 <span>
                   <Users className="" />

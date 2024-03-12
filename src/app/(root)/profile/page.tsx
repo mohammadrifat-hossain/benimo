@@ -13,6 +13,8 @@ const ProfilePage = () => {
 
   const [userInfo, setUserInfo] = useState<UserProfileType | null>(null);
   const [allPosts, setAllPosts] = useState<PostType[] | null>(null);
+  const [followers, setFollowers] = useState(0)
+  const [following, setFollowing] = useState(0)
 
   useEffect(()=>{
     if(!userData?.user){
@@ -34,6 +36,22 @@ const ProfilePage = () => {
     setAllPosts(data?.userPosts);
   }, [userInfo]);
 
+  const getFollowing = useCallback(async() =>{
+    const {data} = await axios.post('/api/getfollowing',{
+      userId: userInfo?.id
+    })
+    setFollowing(data?.following?.length > 0 ? data?.following?.length : 0)
+    
+  },[userInfo])
+
+  const getFollowers = useCallback(async()=>{
+    const {data} = await axios.post('/api/getfollowers',{
+      userId: userInfo?.id
+    })
+    setFollowers(data?.followers?.length > 0 ? data?.followers?.length : 0)
+    
+  },[userInfo])
+
   useEffect(() => {
     getUser();
   }, [getUser]);
@@ -41,6 +59,16 @@ const ProfilePage = () => {
   useEffect(() => {
     getUserPost();
   }, [getUserPost]);
+
+  useEffect(() => {
+    getFollowing();
+  }, [getFollowing]);
+
+  useEffect(() => {
+    getFollowers();
+  }, [getFollowers]);
+
+
 
   return (
     <div className="w-full overflow-y-auto">
@@ -63,9 +91,9 @@ const ProfilePage = () => {
               @{userInfo?.name.toLowerCase().replace(/\s/g, "")}
             </h3>
             <div className="flex items-center justify-center gap-2 my-2">
-              <div>0 Followers</div>
+              <div>{followers} Followers</div>
               <span className="h-[20px] w-[1px] bg-slate-400"></span>
-              <div>0 Following</div>
+              <div>{following} Following</div>
             </div>
           </div>
         </div>
