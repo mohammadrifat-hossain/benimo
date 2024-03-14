@@ -1,11 +1,8 @@
-"use client";
-
-
 import Link from "next/link";
 import React from "react";
 import MenuPage from "./Menu";
 import { Badge } from "@mui/material";
-import { Bell, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import SearchDrawer from "./Search";
 import Notifications from "./Header/Notifications";
 
@@ -19,7 +16,7 @@ const Header = () => {
       </div>
       <div className="flex  items-center justify-center gap-5">
         <SearchDrawer />
-        <Link href={'/messages'}>
+        <Link href={"/messages"}>
           <Badge badgeContent={1} color="primary">
             <MessageCircle size={"30px"} />
           </Badge>

@@ -47,6 +47,13 @@ export const POST = async (req: Request) => {
             },
           });
           if (liked) {
+            await client.notification.create({
+              data: {
+                userId: postInfo?.authorId,
+                notification: 'Someone liked your post',
+                redirectUrl: `/postcontent/${postInfo?.id}`
+              }
+            })
             return NextResponse.json({
               message: "liked",
               success: true,

@@ -15,7 +15,7 @@ import { Spinner } from "@material-tailwind/react";
 
 const VerifyOtp = () => {
   const [otp, setOtp] = useState<string[]>(new Array(4).fill(""));
-  const [second, setSecond] = useState(10);
+  const [second, setSecond] = useState(60);
   const [triggered, setTriggered] = useState(false);
   const [mainOtp, setMainOtp] = useState<Number | undefined>();
   const [expireDate, setExpireDate] = useState();

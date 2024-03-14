@@ -29,10 +29,24 @@ export const POST = async (req:Request) => {
         }
       }
     })
+    
+    const postInfo = await client.post.findUnique({
+      where: {
+        id: addComment.postId
+      }
+    })
+    
 
     if(!addComment){
       return NextResponse.json({message:"Internal server error", success: false})
     }
+    await client.notification.create({
+      data: {
+        userId: postInfo?.authorId!,
+        notification: 'Someone added comment on your post',
+        redirectUrl: `/postcontent/${addComment?.authorId}`
+      }
+    })
 
     return NextResponse.json({message:"Comment added", success: true})
   } catch (error: any) {

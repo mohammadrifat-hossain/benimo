@@ -14,7 +14,7 @@ model User {
   password      String?
   image         String?
   emailVerified Boolean?
-  verified      Boolean @default(false)
+  verified      Boolean     @default(false)
   createdAt     DateTime    @default(now())
   posts         Post[]
   likes         Like[]
@@ -111,5 +111,12 @@ model Notification {
   createdAt    DateTime @default(now())
   notification String
   redirectUrl  String
-  seen Boolean @default(false)
+  seen         Boolean  @default(false)
+}
+
+model Story {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  imageUrl String
+  createAt DateTime @default(now())
 }

@@ -26,6 +26,14 @@ export const POST = async (req:Request) => {
       }
     })
 
+    await client.notification.create({
+      data: {
+        userId,
+        notification: 'You have a new Follower',
+        redirectUrl: `/userprofile/${myId}`
+      }
+    })
+
     if(!followed){
       return NextResponse.json({message:"Something went wrong", success:false})
     }

@@ -24,3 +24,12 @@ export type PostType = {
   createdAt: Date | string;
   authorId: string;
 }
+
+export type NotificationType = {
+  id: string; // Assuming the MongoDB ObjectId will be handled as a string in TypeScript
+  userId: string; // Same as above, ObjectId as string
+  createdAt: Date; // DateTime in Prisma maps to Date in TypeScript
+  notification: string;
+  redirectUrl: string;
+  seen: boolean;
+};

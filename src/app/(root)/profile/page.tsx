@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { TbCircleChevronLeft } from "react-icons/tb";
 
 const ProfilePage = () => {
   const { data: userData } = useSession();
@@ -68,10 +69,15 @@ const ProfilePage = () => {
     getFollowers();
   }, [getFollowers]);
 
-
+  const handleBack = () => {
+    history.back();
+  };
 
   return (
     <div className="w-full overflow-y-auto">
+      <div className="pl-5">
+        <TbCircleChevronLeft size={"28px"} onClick={handleBack} />
+      </div>
       <div className="p-4 max-w-[600px] w-full mx-auto">
         <div className="p-2 rounded-lg bg-slate-200 flex flex-col gap-3 items-center justify-center">
           <Image
