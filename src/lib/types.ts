@@ -33,3 +33,13 @@ export type NotificationType = {
   redirectUrl: string;
   seen: boolean;
 };
+
+export type StoryType = {
+  _id: string;
+  userId: string;
+  userName: string;
+  userImage: string;
+  createdAt: Date | string; // or Date if you prefer to work with Date objects
+  imageUrl: string;
+  __v: number;
+}

@@ -1,15 +1,19 @@
 import { Plus } from "lucide-react";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import ImageUpload from "./ImageUpload";
 import { FiUpload } from "react-icons/fi";
 import { toast } from "./ui/use-toast";
 import Image from "next/image";
+import axios from "axios";
+import { UserProfileType } from "@/lib/types";
+import { useSession } from "next-auth/react";
 
 interface PostStoryProps {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   storyImage: string;
   setStoryImage: Dispatch<SetStateAction<string>>;
+  getMyStory: () => void
 }
 
 const PostStory = ({
@@ -17,25 +21,44 @@ const PostStory = ({
   setIsOpen,
   storyImage,
   setStoryImage,
+  getMyStory
 }: PostStoryProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState<UserProfileType| null>(null)
 
-  //functions
-  const handleClose = () => {
-    if (storyImage) {
-      setIsOpen(false);
-      //upload functionality
-    } else {
-      toast({
-        title: "Please select a image",
-        variant: "destructive",
-      });
-    }
-  };
+
+  const {data:userData} = useSession()
+
+  const getUserInfo = useCallback(async()=>{
+    const {data} = await axios.post('/api/getuser',{
+      userEmail: userData?.user?.email
+    })
+    setUserInfo(data?.userInfo)
+  },[userData])
+
+
+  useEffect(()=>{
+    getUserInfo()
+  },[getUserInfo])
+;
 
   const handleStoryPost = async () => {
     if(storyImage){
-      setIsOpen(false)
+      setIsLoading(true)
+      const {data} = await axios.post('/api/poststory',{
+        imageUrl: storyImage,
+        userId: userInfo?.id,
+        userName: userInfo?.name,
+        userImage: userInfo?.image
+      })
+      if(data?.success){
+        setIsOpen(false)
+        toast({
+          title: data?.message
+        })
+        getMyStory()
+      }
+      setIsLoading(false)
     }else{
       toast({
         title:"Select a image"
@@ -86,7 +109,7 @@ const PostStory = ({
       </div>
       <div
         className="absolute h-full w-full left-0 right-0 -z-[1]"
-        onClick={handleClose}
+        // onClick={handleClose}
       ></div>
     </div>
   );
