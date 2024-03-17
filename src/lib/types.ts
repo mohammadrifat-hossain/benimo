@@ -43,3 +43,20 @@ export type StoryType = {
   imageUrl: string;
   __v: number;
 }
+
+export type FriendsType = {
+  id: string;
+  userId: string;
+  friendId: string;
+  index: number;
+  createAt: string | Date; // Assuming this is a string representation of a date
+}
+
+export type MessageType = {
+  id: string; // Assuming `id` is a string
+  senderName: string;
+  senderId: string;
+  receiverId: string;
+  text: string;
+  createdAt: Date; // Assuming `createdAt` is a Date object
+}

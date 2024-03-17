@@ -120,3 +120,11 @@ model Story {
   imageUrl String
   createAt DateTime @default(now())
 }
+
+model Friends {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  friendId String @db.ObjectId
+  index Int @default(1)
+  createAt DateTime @default(now())
+}

@@ -130,7 +130,23 @@ const UserProfile = ({
     history.back();
   };
 
-  const handleMessage = async () => {};
+  const handleMessage = useCallback(async()=>{
+    const {data} = await axios.post('/api/addfriend',{
+      userId: userInfo?.id,
+      friendId: userId
+    })
+    if(data?.success){
+      toast({
+        title: data?.message
+      })
+      router.push('/messages')
+    }else{
+      toast({
+        title: data?.message
+      })
+    }
+    
+  },[userId, userInfo, router]);
 
   return (
     <div className="w-full overflow-y-auto">

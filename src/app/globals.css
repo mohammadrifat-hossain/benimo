@@ -74,7 +74,7 @@
     @apply bg-background text-foreground;
   }
 }
-html{
+html {
   scroll-behavior: smooth;
 }
 
@@ -86,3 +86,6 @@ html{
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px #fff;
 }
 
+.bggradient {
+  background: linear-gradient(45deg, #5b86e5, #36d1dc);
+}
