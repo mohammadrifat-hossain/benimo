@@ -1,11 +1,31 @@
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth, { Account, AuthOptions, CallbacksOptions, CookiesOptions, EventCallbacks, LoggerInstance, PagesOptions, Profile, SessionOptions, Theme } from "next-auth";
+import { Adapter } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/lib/prismadb";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
+import { JWTOptions } from "next-auth/jwt";
+import { Provider } from "next-auth/providers/index";
 
-export const authOptions: AuthOptions = {
+interface CustomAuthOptions extends AuthOptions {
+    adapter?: Adapter;
+    callbacks?: Partial<CallbacksOptions<Profile, Account>>;
+    cookies?: Partial<CookiesOptions>;
+    debug?: boolean;
+    events?: Partial<EventCallbacks>;
+    jwt?: Partial<JWTOptions>;
+    logger?: Partial<LoggerInstance>;
+    pages?: Partial<PagesOptions>;
+    providers: Provider[];
+    secret?: string;
+    session?: Partial<SessionOptions>;
+    theme?: Theme;
+    useSecureCookies?: boolean;
+    // Add other properties as needed
+}
+
+const authOptions: CustomAuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
         GoogleProvider({
@@ -33,13 +53,13 @@ export const authOptions: AuthOptions = {
                     throw new Error("Invalid Credentials");
                 }
 
-                const currectPassword = await bcrypt.compare(
+                const correctPassword = await bcrypt.compare(
                     credentials.password,
                     user.password
                 );
 
-                if (!currectPassword) {
-                throw new Error("Invalidate password");
+                if (!correctPassword) {
+                    throw new Error("Invalid password");
                 }
                 return user;
             },
@@ -52,7 +72,7 @@ export const authOptions: AuthOptions = {
     session: {
         strategy: "jwt",
     },
-    secret: process.env.NEXT_SECRET,
+    secret: process.env.NEXT_SECRET || "",
 };
 
 const handler = NextAuth(authOptions);
