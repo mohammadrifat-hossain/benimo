@@ -1,7 +1,7 @@
 import client from "@/lib/prismadb"
 import { NextResponse } from "next/server"
 
-export const POST = async (req:Request) => {
+export const POST = async (req) => {
   const {userId} = await req.json()
 
   try {
@@ -19,7 +19,7 @@ export const POST = async (req:Request) => {
       }
     })
 
-    const followingUserIds = following.map((follow: { userId: string }) => follow.userId);
+    const followingUserIds = following.map(follow => follow.userId);
     
 
     // Find connected users - those present in both followers and following
@@ -34,7 +34,7 @@ export const POST = async (req:Request) => {
 
     return NextResponse.json({followers: uniqueFollowers, connected:connectedUsers})
 
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
     return NextResponse.json({message:error.message, success:false})
   }
