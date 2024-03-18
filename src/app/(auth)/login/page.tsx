@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
-export const Loader = () => {
+const Loader = () => {
   return (
     <div className="fixed h-screen w-screen flex items-center justify-center left-0 top-0 opacity-50">
       <Image
