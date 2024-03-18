@@ -1,42 +1,35 @@
-"use client";
-
-import { Pencil } from "lucide-react";
+'use client'
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
-import "@mui/material/TextField/textFieldClasses";
-import { Input, InputAdornment, InputLabel } from "@mui/material";
-import ImageUpload from "@/components/ImageUpload";
 import { FiUpload } from "react-icons/fi";
 import { toast } from "@/components/ui/use-toast";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { Loader } from "@/components/Loader";
 import axios from "axios";
+import ImageUpload from "@/components/ImageUpload";
+import { Pencil } from "lucide-react";
 
 const CreatePostPage = () => {
-  const searchParam = useSearchParams();
+  const searchParams = useSearchParams();
   const [postText, setPostText] = useState<string | null>("");
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const inputValue = searchParam.get("inputValue");
+  const inputValue = searchParams.get("inputValue");
 
   const { data } = useSession();
 
-  //effects
   useEffect(() => {
     if (inputValue) {
       setPostText(inputValue);
     }
   }, [inputValue]);
 
-  //functions
   const handleCaptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPostText(value);
-    // router.replace(`/createpost?inputValue=${postText}`)
   };
 
   const handleUpload = async () => {
@@ -45,41 +38,54 @@ const CreatePostPage = () => {
         title: "Login first",
       });
       router.push("/login");
-    } else {
-      if (!postText) {
+      return;
+    }
+
+    if (!postText) {
+      toast({
+        title: "Please enter a caption",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!imageUrl) {
+      toast({
+        title: "Please select a photo",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post("/api/createpost", {
+        postText,
+        imageUrl,
+        userEmail: data?.user?.email,
+      });
+
+      if (response.data.success) {
         toast({
-          title: "Please Enter a caption",
+          title: response.data.message,
+          description: "Redirected to your post",
+        });
+        router.push(`/`);
+      } else {
+        toast({
+          title: response.data.message,
           variant: "destructive",
         });
-      } else {
-        if (!imageUrl) {
-          toast({
-            title: "Please Select a photo",
-            variant: "destructive",
-          });
-        } else {
-          setIsLoading(true);
-          const response = await axios.post("/api/createpost", {
-            postText,
-            imageUrl,
-            userEmail: data?.user?.email,
-          });
-
-          if(response?.data?.success){
-            toast({
-              title: response.data.message,
-              description:"redirected to your post"
-            })
-            router.push(`/`)
-          }else{
-            toast({
-              title: response.data.message,
-              variant:"destructive"
-            })
-          }
-          setIsLoading(false)
-        }
       }
+    } catch (error) {
+      console.error("Error uploading post:", error);
+      toast({
+        title: "An error occurred while uploading the post",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -112,9 +118,7 @@ const CreatePostPage = () => {
 
           <div className="flex items-center justify-center mt-5 flex-col w-full ">
             {imageUrl ? (
-              <>
-                <Image src={imageUrl} height={600} width={600} alt="image" />
-              </>
+              <Image src={imageUrl} height={600} width={600} alt="image" />
             ) : (
               <>
                 <ImageUpload value={imageUrl} onChange={setImageUrl} post />
@@ -131,13 +135,8 @@ const CreatePostPage = () => {
               onClick={handleUpload}
               disabled={isLoading}
             >
-              {isLoading ? (
-                "UPLOADING..."
-              ) : (
-                <>
-                  UPLOAD <FiUpload />
-                </>
-              )}
+              {isLoading ? "UPLOADING..." : "UPLOAD"}
+              <FiUpload />
             </button>
           </div>
         </div>

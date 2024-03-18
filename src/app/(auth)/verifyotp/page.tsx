@@ -4,9 +4,6 @@ import React, {
   useState,
   useRef,
   useEffect,
-  ChangeEvent,
-  KeyboardEvent,
-  useMemo,
   useCallback,
 } from "react";
 import { useToast } from "@/components/ui/use-toast";
@@ -38,15 +35,6 @@ const VerifyOtp = () => {
     inputRefs.current[0]?.focus();
   }, []);
 
-  // useEffect(()=>{
-  //   if(id == 'undefined'){
-  //     router.push("/register")
-  //     toast({
-  //       title:"Please try again"
-  //     })
-  //   }
-  // },[id, router, toast])
-
   const getOtp = useCallback(async () => {
     if (id) {
       const res = await fetch("/api/getotp", {
@@ -61,9 +49,6 @@ const VerifyOtp = () => {
     }
   }, [id]);
 
-  // useEffect(() => {
-  //   getOtp();
-  // }, [getOtp]);
   useEffect(() => {
     const randomOtp = Math.floor(1000 + Math.random() * 9000);
     setMainOtp(randomOtp);
@@ -101,7 +86,6 @@ const VerifyOtp = () => {
         setSecond(second - 1);
       }
     }, 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     return () => clearInterval(interval);
   }, [triggered, second]);
 
