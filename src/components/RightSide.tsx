@@ -1,11 +1,20 @@
+"use client";
+import { Skeleton } from "@mui/material";
 import { ImagePlus, LogIn, LogOut, Settings, User, Users } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { HiHome } from "react-icons/hi";
 
 const RightSide = () => {
   const { data } = useSession();
+  const router = useRouter();
 
+  //functions
+  const handleLogout = () => {
+    signOut();
+    router.push("/login");
+  };
   return (
     <div className="h-full">
       {data?.user ? (
@@ -43,7 +52,7 @@ const RightSide = () => {
           <div>
             <button
               className="flex items-center justify-start gap-3 text-lg  font-bold  w-full px-5 py-2 rounded-md bg-[#eee] hover:bg-[#d8d8d8] transition-all"
-              onClick={() => signOut()}
+              onClick={handleLogout}
             >
               <LogOut />
               Logout
@@ -51,13 +60,8 @@ const RightSide = () => {
           </div>
         </div>
       ) : (
-        <div>
-          <Link href={"/login"}>
-            <button className="flex items-center justify-start gap-3 text-lg  font-bold  w-full px-5 py-2 rounded-md bg-[#eee] hover:bg-[#d8d8d8] transition-all">
-              <LogIn />
-              Login
-            </button>
-          </Link>
+        <div className="">
+          <Skeleton className="w-[260px] ml-4" animation="wave" />
         </div>
       )}
     </div>

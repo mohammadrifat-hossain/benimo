@@ -6,14 +6,22 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { ImagePlus, LogIn, LogOut, Settings, User, Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { HiHome } from "react-icons/hi";
+import { useRouter } from "next/navigation";
 
 const MenuPage = () => {
   const { data } = useSession();
+  const router = useRouter()
+
+  //functions
+  const handleLogout = () =>{
+    signOut()
+    router.push('/login')
+  }
   return (
     <Popover>
       <PopoverTrigger>
@@ -76,7 +84,7 @@ const MenuPage = () => {
             <div>
               <button
                 className="flex items-center justify-start gap-4 hover: px-6 py-2 w-full hover:bg-slate-100 text-slate-500"
-                onClick={() => signOut()}
+                onClick={handleLogout}
               >
                 <span>
                   <LogOut />

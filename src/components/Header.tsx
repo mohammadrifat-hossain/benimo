@@ -17,7 +17,7 @@ const Header = () => {
       <div className="flex  items-center justify-center gap-5">
         <SearchDrawer />
         <Link href={"/messages"}>
-          <Badge badgeContent={1} color="primary">
+          <Badge badgeContent={0} color="primary">
             <MessageCircle size={"30px"} />
           </Badge>
         </Link>

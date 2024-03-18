@@ -98,9 +98,9 @@ const UserProfile = ({
       myId: userInfo?.id,
       userId: profileInfo?.id,
     });
-    
+
     if (data?.success) {
-      router.refresh()
+      router.refresh();
       getFollowers();
       getFollowing();
     }
@@ -118,7 +118,7 @@ const UserProfile = ({
     });
 
     if (data?.success) {
-      router.refresh()
+      router.refresh();
       getFollowers();
       getFollowing();
     }
@@ -130,23 +130,22 @@ const UserProfile = ({
     history.back();
   };
 
-  const handleMessage = useCallback(async()=>{
-    const {data} = await axios.post('/api/addfriend',{
+  const handleMessage = useCallback(async () => {
+    const { data } = await axios.post("/api/addfriend", {
       userId: userInfo?.id,
-      friendId: userId
-    })
-    if(data?.success){
+      friendId: userId,
+    });
+    if (data?.success) {
       toast({
-        title: data?.message
-      })
-      router.push('/messages')
-    }else{
+        title: data?.message,
+      });
+      router.push("/messages");
+    } else {
       toast({
-        title: data?.message
-      })
+        title: data?.message,
+      });
     }
-    
-  },[userId, userInfo, router]);
+  }, [userId, userInfo, router]);
 
   return (
     <div className="w-full overflow-y-auto">
@@ -222,7 +221,9 @@ const UserProfile = ({
               />
             ))
         ) : (
-          <div className="w-full px-2 text-lg">No post found</div>
+          <div className="w-full px-2 text-lg flex items-center justify-center">
+            No post found
+          </div>
         )}
       </div>
     </div>

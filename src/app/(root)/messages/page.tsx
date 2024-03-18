@@ -80,7 +80,7 @@ const MessagePage = () => {
         <ChatList allFriends={sortedFriends} setCurrentChat={setCurrentChat} currentChat={currentChat} allUsers={allUsers!}/>
       </div>
       <div className="w-full flex h-[91vh] md:h-[93.5vh]">
-        <Chat currentChat={currentChat} userInfo={userInfo} newMessage={newMessage!} />
+        <Chat currentChat={currentChat} userInfo={userInfo} newMessage={newMessage!} getMyFriends={getMyFriends}/>
       </div>
     </div>
   );

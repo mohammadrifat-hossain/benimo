@@ -11,9 +11,10 @@ interface ChatProps {
   currentChat?: string;
   userInfo: UserProfileType;
   newMessage?: SocketMessageType;
+  getMyFriends: ()=> void
 }
 
-const Chat = ({ currentChat, userInfo: userData, newMessage }: ChatProps) => {
+const Chat = ({ currentChat, userInfo: userData, newMessage, getMyFriends }: ChatProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -97,6 +98,7 @@ const Chat = ({ currentChat, userInfo: userData, newMessage }: ChatProps) => {
           message,
         });
         scrollToBottom();
+        getMyFriends()
       }
     } else {
       toast({

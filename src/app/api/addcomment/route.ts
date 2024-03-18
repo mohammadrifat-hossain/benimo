@@ -44,7 +44,7 @@ export const POST = async (req:Request) => {
       data: {
         userId: postInfo?.authorId!,
         notification: 'Someone added comment on your post',
-        redirectUrl: `/postcontent/${addComment?.authorId}`
+        redirectUrl: `/postcontent/${addComment?.postId}`
       }
     })
 

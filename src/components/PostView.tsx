@@ -11,7 +11,6 @@ import {
   Edit,
   Heart,
   MessageCircle,
-  Trash2,
 } from "lucide-react";
 import Image from "next/image";
 import { Skeleton } from "@mui/material";
@@ -22,6 +21,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "./ui/use-toast";
 import { useSession } from "next-auth/react";
 import DeleteConfirmation from "@/app/(root)/_components/DeleteConfirmation";
+
 
 interface PostViewProps {
   postId: string;
@@ -48,13 +48,13 @@ const PostView = ({ postId, userEmail, isProfile }: PostViewProps) => {
 
   const router = useRouter();
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const {data: userData} = useSession()
+  const { data: userData } = useSession();
 
-  useEffect(()=>{
-    if(!userData){
-      router.push('/login')
+  useEffect(() => {
+    if (!userData) {
+      router.push("/login");
     }
-  },[router, userData])
+  }, [router, userData]);
 
   const getPost = useCallback(async () => {
     const { data } = await axios.post("/api/getpostdetails", {
@@ -132,7 +132,10 @@ const PostView = ({ postId, userEmail, isProfile }: PostViewProps) => {
     router.push(`/postcontent/${postId}`);
   };
   return (
-    <div className="mt-5 border-y border-y-[#bbbbbb67]">
+    <div
+      
+      className="mt-5 border-y border-y-[#bbbbbb67]"
+    >
       <div className="flex items-center justify-between w-full p-4">
         <div>
           <UserDetails
@@ -152,11 +155,14 @@ const PostView = ({ postId, userEmail, isProfile }: PostViewProps) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <div className="flex flex-col gap-2 justify-start items-start w-full">
-                  <button className="flex items-center justify-start gap-2 hover:bg-[#aaaaaa38] transition-all w-full" onClick={()=> router.push(`/editpost/${postId}`)}>
+                  <button
+                    className="flex items-center justify-start gap-2 hover:bg-[#aaaaaa38] transition-all w-full"
+                    onClick={() => router.push(`/editpost/${postId}`)}
+                  >
                     <Edit />
                     Edit
                   </button>
-                  <DeleteConfirmation postId={postId}/>
+                  <DeleteConfirmation postId={postId} />
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>

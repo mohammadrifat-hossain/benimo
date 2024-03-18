@@ -10,18 +10,18 @@ import { TbCircleChevronLeft } from "react-icons/tb";
 
 const ProfilePage = () => {
   const { data: userData } = useSession();
-  const router = useRouter()
+  const router = useRouter();
 
   const [userInfo, setUserInfo] = useState<UserProfileType | null>(null);
   const [allPosts, setAllPosts] = useState<PostType[] | null>(null);
-  const [followers, setFollowers] = useState(0)
-  const [following, setFollowing] = useState(0)
+  const [followers, setFollowers] = useState(0);
+  const [following, setFollowing] = useState(0);
 
-  useEffect(()=>{
-    if(!userData?.user){
-      router.push('/login')
+  useEffect(() => {
+    if (!userData?.user) {
+      router.push("/login");
     }
-  },[router, userData])
+  }, [router, userData]);
 
   const getUser = useCallback(async () => {
     const { data } = await axios.post("/api/getuser", {
@@ -37,21 +37,19 @@ const ProfilePage = () => {
     setAllPosts(data?.userPosts);
   }, [userInfo]);
 
-  const getFollowing = useCallback(async() =>{
-    const {data} = await axios.post('/api/getfollowing',{
-      userId: userInfo?.id
-    })
-    setFollowing(data?.following?.length > 0 ? data?.following?.length : 0)
-    
-  },[userInfo])
+  const getFollowing = useCallback(async () => {
+    const { data } = await axios.post("/api/getfollowing", {
+      userId: userInfo?.id,
+    });
+    setFollowing(data?.following?.length > 0 ? data?.following?.length : 0);
+  }, [userInfo]);
 
-  const getFollowers = useCallback(async()=>{
-    const {data} = await axios.post('/api/getfollowers',{
-      userId: userInfo?.id
-    })
-    setFollowers(data?.followers?.length > 0 ? data?.followers?.length : 0)
-    
-  },[userInfo])
+  const getFollowers = useCallback(async () => {
+    const { data } = await axios.post("/api/getfollowers", {
+      userId: userInfo?.id,
+    });
+    setFollowers(data?.followers?.length > 0 ? data?.followers?.length : 0);
+  }, [userInfo]);
 
   useEffect(() => {
     getUser();
@@ -116,7 +114,9 @@ const ProfilePage = () => {
               />
             ))
         ) : (
-          <div className="w-full px-2 text-lg">No post found</div>
+          <div className="w-full px-2 text-lg flex items-center justify-center">
+            No post found
+          </div>
         )}
       </div>
     </div>

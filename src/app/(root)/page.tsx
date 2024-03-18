@@ -1,12 +1,7 @@
-"use client";
-
-import { Button } from "@mui/material";
-import { signIn, signOut, useSession } from "next-auth/react";
 import MidSide from "./_components/MidSide";
 import RightSide from "@/components/RightSide";
 
 export default function Home() {
-  const { data } = useSession();
   return (
     <main className="flex ">
       {/* left side */}
