@@ -7,10 +7,12 @@ const ChatUsers = ({
   item,
   setCurrentChat,
   currentChat,
+  isOnline
 }: {
   item: FriendsType;
   setCurrentChat: Dispatch<React.SetStateAction<string>>;
   currentChat?: string;
+  isOnline?: boolean
 }) => {
   const [user, setUser] = useState<UserProfileType | null>(null);
 
@@ -37,7 +39,7 @@ const ChatUsers = ({
     >
       <Avatar src={user?.image} />
       <h1 className="text-lg hidden md:block font-bold">{user?.name}</h1>
-      <span className="h-3 w-3 rounded-full bg-green-600 animate-pulse absolute top-2 right-2"></span>
+      {isOnline && (<span className="h-3 w-3 rounded-full bg-green-600 animate-pulse absolute top-2 right-2"></span>)}
     </div>
   );
 };

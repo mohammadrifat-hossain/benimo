@@ -1,17 +1,19 @@
-import React, { useCallback, useEffect, useRef, useState, memo } from "react";
+import React, { useCallback, useEffect, useRef, useState, memo, KeyboardEvent } from "react";
 import { Avatar } from "@mui/material";
 import { CircleUser, Send } from "lucide-react";
-import { MessageType, UserProfileType } from "@/lib/types";
+import { MessageType, SocketMessageType, UserProfileType } from "@/lib/types";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
+import io from "socket.io-client";
 
 interface ChatProps {
   currentChat?: string;
   userInfo: UserProfileType;
+  newMessage?: SocketMessageType;
 }
 
-const Chat = ({ currentChat, userInfo: userData }: ChatProps) => {
+const Chat = ({ currentChat, userInfo: userData, newMessage }: ChatProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -23,7 +25,7 @@ const Chat = ({ currentChat, userInfo: userData }: ChatProps) => {
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
     }
   };
 
@@ -35,16 +37,17 @@ const Chat = ({ currentChat, userInfo: userData }: ChatProps) => {
   }, [currentChat]);
 
   const getMessages = useCallback(async () => {
-    const { data } = await axios.post("/api/getmessages", {
-      senderId: userData?.id,
-      receiverId: currentChat,
-    });
-    setAllMessages(data?.messages);
+    try {
+      const { data } = await axios.post("/api/getmessages", {
+        senderId: userData?.id,
+        receiverId: currentChat,
+      });
+      setAllMessages(data?.messages);
+      scrollToBottom(); // Call scrollToBottom() after setting messages
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
   }, [currentChat, userData]);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, []);
 
   useEffect(() => {
     getUserInfo();
@@ -63,17 +66,37 @@ const Chat = ({ currentChat, userInfo: userData }: ChatProps) => {
     }
   }, [currentChat, router]);
 
+  useEffect(() => {
+    getMessages().then(() => {
+      scrollToBottom();
+    });
+  }, [newMessage, getMessages]);
+
+  useEffect(() => {
+    scrollToBottom();
+  });
+
   const handleMessageSend = async () => {
+    const socket = io("https://networknestbackend.onrender.com");
     if (message) {
       const { data } = await axios.post("/api/messagesend", {
         senderId: userData?.id,
         receiverId: userInfo?.id,
         senderName: userData?.name,
-        text: message,
+        message: message,
       });
-      if(data?.success){
-        setMessage('')
-        getMessages( )
+      if (data?.success) {
+        setMessage("");
+        getMessages();
+
+        //* send socket message
+        socket.emit("send_user_message", {
+          senderName: userInfo?.name,
+          receiverId: currentChat,
+          senderId: userInfo?.id,
+          message,
+        });
+        scrollToBottom();
       }
     } else {
       toast({
@@ -81,6 +104,11 @@ const Chat = ({ currentChat, userInfo: userData }: ChatProps) => {
       });
     }
   };
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) =>{
+    if(e.key === 'Enter'){
+      handleMessageSend()
+    }
+  }
 
   return (
     <div className="w-full h-full ">
@@ -90,7 +118,6 @@ const Chat = ({ currentChat, userInfo: userData }: ChatProps) => {
           <div className="flex items-center gap-3">
             <Avatar src={userInfo?.image} />
             <h1 className="text-lg font-bold">{userInfo?.name}</h1>
-            <span className="h-3 w-3 rounded-full bg-green-600 animate-pulse"></span>
           </div>
           <div className="mr-4">
             <CircleUser
@@ -102,7 +129,10 @@ const Chat = ({ currentChat, userInfo: userData }: ChatProps) => {
         </div>
       </div>
       {/* mid */}
-      <div className="max-h-[83%] h-full border overflow-y-auto">
+      <div
+        className="max-h-[83%] h-full border overflow-y-auto"
+        ref={messagesEndRef}
+      >
         {allMessages?.length! > 0 ? (
           allMessages?.map((item, i) => (
             <React.Fragment key={i}>
@@ -125,7 +155,7 @@ const Chat = ({ currentChat, userInfo: userData }: ChatProps) => {
                       item.receiverId === currentChat && "bggradient text-white"
                     }`}
                   >
-                    {item.text}
+                    {item.message}
                   </p>
                 </div>
               </div>
@@ -136,7 +166,6 @@ const Chat = ({ currentChat, userInfo: userData }: ChatProps) => {
             <h1>No messages found</h1>
           </div>
         )}
-        <div ref={messagesEndRef} />
       </div>
       {/* bottom */}
       <div
@@ -150,6 +179,7 @@ const Chat = ({ currentChat, userInfo: userData }: ChatProps) => {
           placeholder="Enter your message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e)=>handleKeyDown(e)}
         />
         <button
           className="px-5 py-2 rounded-full outline-none bg-indigo-400 border hover:shadow-lg transition-all text-white flex items-center gap-2"

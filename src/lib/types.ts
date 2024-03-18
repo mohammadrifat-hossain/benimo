@@ -57,6 +57,29 @@ export type MessageType = {
   senderName: string;
   senderId: string;
   receiverId: string;
-  text: string;
+  message: string;
   createdAt: Date; // Assuming `createdAt` is a Date object
+}
+
+interface UserInfo {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  image: string;
+  emailVerified: string | null;
+  verified: boolean;
+  createdAt: string;
+}
+
+export type SocketUserType = {
+  userId: string;
+  socketId: string;
+  userInfo: UserInfo;
+}
+export interface SocketMessageType {
+  senderName: string;
+  receiverId: string;
+  senderId: string;
+  message: string;
 }

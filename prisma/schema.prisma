@@ -92,9 +92,9 @@ model Following {
 model Message {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   senderName String
-  senderId   String   @db.ObjectId
-  receiverId String   @db.ObjectId
-  text       String
+  senderId   String   
+  receiverId String   
+  message       String
   createdAt  DateTime @default(now())
 }
 
