@@ -2,12 +2,14 @@ import NextAuth, { Account, AuthOptions, CallbacksOptions, CookiesOptions, Event
 import { Adapter } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import client from "@/lib/prismadb";
+// import client from "@/lib/prismadb";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { JWTOptions } from "next-auth/jwt";
 import { Provider } from "next-auth/providers/index";
+import { PrismaClient } from "@prisma/client";
 
+const client = new PrismaClient()
 interface CustomAuthOptions extends AuthOptions {
     adapter?: Adapter;
     callbacks?: Partial<CallbacksOptions<Profile, Account>>;
