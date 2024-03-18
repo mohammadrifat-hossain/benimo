@@ -30,7 +30,6 @@ import DeleteConfirmation from "../../_components/DeleteConfirmation";
 import { TbCircleChevronLeft } from "react-icons/tb";
 
 interface PostContentProps {
-  postId?: string;
   params: {
     postContentId: string;
   };
