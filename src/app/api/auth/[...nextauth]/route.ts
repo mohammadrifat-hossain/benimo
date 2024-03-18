@@ -2,7 +2,7 @@ import NextAuth, { Account, AuthOptions, CallbacksOptions, CookiesOptions, Event
 import { Adapter } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import prisma from "@/lib/prismadb";
+import client from "@/lib/prismadb";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { JWTOptions } from "next-auth/jwt";
@@ -26,7 +26,7 @@ interface CustomAuthOptions extends AuthOptions {
 }
 
 const authOptions: CustomAuthOptions = {
-    adapter: PrismaAdapter(prisma),
+    adapter: PrismaAdapter(client),
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -43,7 +43,7 @@ const authOptions: CustomAuthOptions = {
                     throw new Error("Invalid Credentials");
                 }
 
-                const user = await prisma.user.findUnique({
+                const user = await client.user.findUnique({
                     where: {
                         email: credentials.email as string,
                     },
