@@ -4,7 +4,7 @@ import client from "@/lib/prismadb"
 import mongoose from "mongoose"
 import { NextResponse } from "next/server"
 
-export const POST = async (req:Request) => {
+export const POST = async (req) => {
   const {userEmail} = await req.json()
 
   try {
