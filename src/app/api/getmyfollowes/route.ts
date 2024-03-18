@@ -19,7 +19,7 @@ export const POST = async (req:Request) => {
       }
     })
 
-    const followingUserIds = following.map(follow => follow.userId);
+    const followingUserIds = following.map((follow: { userId: string }) => follow.userId);
     
 
     // Find connected users - those present in both followers and following
