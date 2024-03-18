@@ -1,7 +1,7 @@
 import client from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
-export const POST = async (req: Request) => {
+export const POST = async (req) => {
   const { senderId, senderName, receiverId, message } = await req.json();
 
   try {

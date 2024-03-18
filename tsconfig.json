@@ -27,6 +27,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/api/getmyfollowes/route.js"
-, "src/app/api/getstory/route.js"  ],
+, "src/app/api/getstory/route.js", "src/app/api/messagesend/route.js"  ],
   "exclude": ["node_modules"]
 }
