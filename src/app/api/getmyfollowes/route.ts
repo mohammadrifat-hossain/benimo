@@ -19,7 +19,6 @@ export const POST = async (req:Request) => {
       }
     })
 
-    const followerUserIds = followers.map(follower => follower.followerUserId);
     const followingUserIds = following.map(follow => follow.userId);
     
 
